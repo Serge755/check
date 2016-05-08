@@ -6,7 +6,7 @@
       var ws = new WebSocket(host);
       ws.onmessage = function (event) 
 	  {
-		document.write(location.origin + event.data + '<br>');
+		document.write(event.data + '<br>');
       };
     </script>
 	
