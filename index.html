@@ -1,34 +1,280 @@
+
+<!DOCTYPE html>
 <html>
-  <head>
-    <style>
-      body {
-        font-family: "Helvetica Neue", helvetica, arial;
-        padding: 15px;
-      }
+    <head>
+        <meta charset="utf-8">
+        <title>WebSockets</title>
+		
+		<script src="utils.js"></script>
+		<script src="elements.js"></script>
+		
+    </head>
+	
+	
+    <body onload="Set();">
+    
+        <section>
+			<div class="viewport">
+	            <div class="overview" id="content"></div>
+			</div>
+		</section>
+    
+        <section>
+            <span id="status">Connecting...</span>
+            <input type="text" id="input"/>
+        </section>
 
-      ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-      }
+        <canvas id="myCanvas" width="800" height="800" style="cursor:crosshair; position:absolute; left: 100px; top:100px;"></canvas>
+    </body>
+	
+	
+    <!--************************************* <script src="frontend.js"></script>  ****************************************-->
+   <script> 
+    var content = document.getElementById("content");
+    var input = document.getElementById("input");
+    var status = document.getElementById("status");
+	  
+	var MDown = false;
 
-      ul li {
-        line-height: 1.4;
-      }
-    </style>
+    var myName = false;
 
-    <script>
-      var host = location.origin.replace(/^http/, 'ws')
-      var ws = new WebSocket(host);
-      ws.onmessage = function (event) {
-        var li = document.createElement('li');
-        li.innerHTML = JSON.parse(event.data);
-        document.querySelector('#pings').appendChild(li);
-      };
+	//***********************************************************
+    window.WebSocket = window.WebSocket || window.MozWebSocket;
+
+    if (!window.WebSocket) {    }
+	//var connection = new WebSocket('ws://localhost:1337');
+	//var connection = new WebSocket('ws://app-rivne5.rhcloud.com:1337');
+	var connection = new WebSocket('ws://127.7.230.1:3000');
+	//var connection = new WebSocket('ws://lapp-rivne5.rhcloud.com:3000');
+    connection.onopen = function () {content.innerText='Connected...'; };
+    connection.onerror = function (error) {    };
+
+	
+    //*************************************************************************
+    connection.onmessage = function (message) 
+	{  
+	    content.innerText="new";
+	    var mes = message.data;
+		content.innerText=mes;
+
+		try
+        {	
+          if (mes[0] === 'n')
+          {		  
+            newTextArea(400);
+		  }
+		  else //******************************
+          if (mes[0] === 'p')
+          {
+		    var A=mes.split(/[;]/);
+            //context.fillStyle = "rgba(0, 0, 200, 0.05)";
+            //context.fillRect(A[1], A[2], 8, 8);
+			Redraw(A[1], A[2]);
+		  }
+		  else //******************************
+          if (mes[0] === 'h')
+          {		  
+		    var A=mes.split(/[,]/);
+            context.fillStyle = "rgba(0, 0, 200, 0.05)";
+			
+			for (var i = 1; i < A.length; i++)
+			{
+			  var B=A[i].split(/[;]/);
+              context.fillRect(B[1], B[2], 8, 8);
+			  //context.arc(100,100,8,8,Math.PI*2,true);
+			}
+
+			/*
+			  context.beginPath();
+			  var B=A[1].split(/[;]/);
+              context.moveTo(B[1], B[2], 8, 8);
+			for (var i = 2; i < A.length; i++)
+			{
+			  var B=A[i].split(/[;]/);
+              context.lineTo(B[1], B[2], 8, 8);
+			}
+			  context.strokeStyle = "rgba(0,0,200,0.2)";
+              context.closePath();
+              context.stroke();
+			*/
+		  }
+		  else //******************************
+		  if (mes[0] === '+')
+		  {
+		    Textarea[0].value +='\nqweqwe';
+		  }
+		}
+        catch(e) {}		
+    };
+	
+    //*************************************************************************
+    connection.onclose = function (message) 
+	{  
+	  content.innerText='DisConnected...';
+	}
+
+    //*************************************************************************
+    document.onkeydown=function(e) 
+	{
+        if (e.keyCode === 13) 
+		{
+            var msg = input.value; 
+            connection.send(msg);
+			input.value = ''; 
+        }
+    };
+
     </script>
-  </head>
-  <body>
-    <h1>Pings</h1>
-    <ul id='pings'></ul>
-  </body>
+	
+	
+	<!--//*************************************************************************-->
+    <script>
+      var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+      context.rect(0, 0, canvas.width, canvas.height);
+
+      var grd = context.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grd.addColorStop(0, '#8ED6FF');   
+      grd.addColorStop(1, '#004CB3');
+      context.fillStyle = grd;
+      context.fill();
+	  
+	  var CL = parseInt(canvas.style.left);
+	  var CT = parseInt(canvas.style.top); //canvas.style.top; 
+	  
+	  var imgd = context.createImageData(8, 8);
+	  var pix = imgd.data;
+	  
+	  
+	  
+	  
+	  
+   function Redraw(X,Y) 
+   {
+     // draw the image onto the canvas
+     context.drawImage(image, 0, 0);
+
+     // get the image data to manipulate
+     var input = context.getImageData(0, 0, canvas.width, canvas.height);
+
+     // get an empty slate to put the data into
+     var output = context.createImageData(canvas.width, canvas.height);
+
+     // alias some variables for convenience
+     // notice that we are using input.width and input.height here
+     // as they might not be the same as canvas.width and canvas.height
+     // (in particular, they might be different on high-res displays)
+     var w = input.width, h = input.height;
+     var inputData = input.data;
+     var outputData = output.data;
+
+     // edge detection
+     for (var y = 1; y < h-1; y += 1) {
+       for (var x = 1; x < w-1; x += 1) {
+         for (var c = 0; c < 3; c += 1) {
+           var i = (y*w + x)*4 + c;
+           outputData[i] = 127 + -inputData[i - w*4 - 4] -   inputData[i - w*4] - inputData[i - w*4 + 4] +
+                                 -inputData[i - 4]       + 8*inputData[i]       - inputData[i + 4] +
+                                 -inputData[i + w*4 - 4] -   inputData[i + w*4] - inputData[i + w*4 + 4];
+         }
+         outputData[(y*w + x)*4 + 3] = 255; // alpha
+       }
+     }
+
+     // put the image data back after manipulation
+     context.putImageData(output, 0, 0);
+   }
+
+	  
+	  
+	  
+	  
+	  
+	  
+	//************** Redraw ********************  
+     function Redraw1(X, Y) 
+	 {
+	      var a = parseInt(Math.random()*255);
+        for (var i = 0, n = pix.length; i < n; i += 4) 
+		{
+		  pix[i] = 75;      //red
+		  pix[i+1] = 75;    //green
+		  pix[i+2] += 2;    //blue
+		  pix[i+3] = 200;   //alpha
+		}
+		context.putImageData(imgd, X-4, Y-4);
+ 	 }
+	
+	//************** Redraw ********************  
+     function Redraw0(X, Y)
+	 {
+	       var n = Y*800*4 + X*4 +1;
+	       Pix[n]=200;
+
+		   context.putImageData(imgD, 0, 0);
+		   //context.drawImage(imgD, 0, 0);
+ 	 }
+	
+ 	 //setInterval(Redraw, 30)  
+	  	  
+
+	//*****************************************
+	 canvas.onmousedown=function(e)
+	 {
+	    MDown = true;
+	 }
+	 
+	//*****************************************
+	 canvas.onmouseup=function(e)
+	 {
+	    MDown = false;
+	 }
+	
+	//*****************************************
+	 canvas.onmousemove=function(e)
+	 {
+	    if (MDown === true)
+		{
+	      var mCur = mousePageXY(e);
+	      var L = mCur.x - CL - 4;
+	      var T = mCur.y - CT - 4;  
+          connection.send('p;' + L  +';' + T );
+        }		  
+	 }
+	 
+	 
+	//*****************************************
+	 document.ontouchstart=function(e)
+	 {
+	    MDown = true;
+		  var touchobj = e.changedTouches[0];
+          var L = touchobj.clientX - CL - 4;
+		  var T = touchobj.clientY - CT - 4;
+          connection.send('p;' + L  +';' + T );
+		  //e.preventDefault();
+	 }
+	 
+	//*****************************************
+	 document.ontouchend=function(e)
+	 {
+	    MDown = false;
+	 }
+	
+	//*****************************************
+	 document.ontouchmove=function(e)
+	 {
+	    if (MDown === true)
+		{
+		  var touchobj = e.changedTouches[0];
+          var L = touchobj.clientX - CL - 4;
+		  var T = touchobj.clientY - CT - 4;
+          connection.send('p;' + L  +';' + T );
+		  e.preventDefault();
+        }		  
+	 }
+	 
+	 
+    </script>
+		
+
 </html>
