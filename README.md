@@ -1,3 +1,18 @@
-The OpenShift `nodejs` cartridge documentation can be found at:
+# Node.js Websocket Test
 
-http://openshift.github.io/documentation/oo_cartridge_guide.html#nodejs
+A tiny demo using the [einaros/ws](http://einaros.github.io/ws/) WebSockets implementation.
+
+# Running Locally
+
+``` bash
+npm install
+npm start
+```
+
+# Running on Heroku
+
+``` bash
+heroku create
+git push heroku master
+heroku open
+```
