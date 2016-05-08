@@ -19,7 +19,7 @@ wss.on("connection", function(ws) {
   var id = setInterval(function() {
     //ws.send(JSON.stringify(new Date()), function() {  })
 	// node index.js
-	ws.send('Привет, Витя ' + ws.upgradeReq.connection.remoteAddress, function() {  })
+	ws.send('Привет, Витя ' + ws.upgradeReq.connection.remoteAddress + '/' + ws._socket.remoteAddress, function() {  })
   }, 1000)
   
   
