@@ -15,13 +15,13 @@ var wss = new WebSocketServer({server: server})
 console.log("websocket server created")
 
 wss.on("connection", function(ws) {
+	console.log(ws.upgradeReq.connection.remoteAddress);
+	
   var id = setInterval(function() {
-	  
     //ws.send(JSON.stringify(new Date()), function() {  })
 	// node index.js
-	ws.send('Привет, Витя', function() {  })
-	
-  }, 3000)
+	ws.send('Привет, Витя ' + ws._server, function() {  })
+  }, 1000)
   
   
   console.log("websocket connection open")
