@@ -20,7 +20,7 @@
 	    
         ws.onmessage = function (event) 
 	    {
-		  div.innerHTML += event.data;
+		  div.innerHTML = event.data;
         };	  
 	  }
 	  
@@ -30,12 +30,13 @@
 	    div.style.background = '#555';
 		div.style.width = '500px';
 		div.style.height = '500px';
+		div.style.color = '#FFF';
 	    document.body.appendChild(div);
 	    div.onmousedown = connect;
 		
 	    var div_send = document.createElement('div');
-	    div_send.style.background = '#ca7';
-		div_send.style.width = '50px';
+	    div_send.style.background = '#fc7';
+		div_send.style.width = '75px';
 		div_send.style.height = '50px';
 	    document.body.appendChild(div_send);
 		
