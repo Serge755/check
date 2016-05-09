@@ -16,7 +16,9 @@ console.log("websocket server created");
 
 var text = 'm ';
 
-wss.on("connection", function(ws) {
+
+wss.on("connection", function(ws) 
+{
 	
   var id = setInterval(function() 
   {
@@ -32,16 +34,14 @@ wss.on("connection", function(ws) {
     clearInterval(id)
   })
   
- ws.on("message", function(event) {
-	text = event.data + ' ';
- })
+  ws.on('message', function incoming(message) 
+  {
+	text = message + ' ';
+    //console.log('received: %s', message);
+  });
   
 })
 
-
-wss.on("message", function(ws) {
-	text = ws.data + ' ';
-})
 
 
 /*
