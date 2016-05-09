@@ -38,6 +38,9 @@
 		div_send.style.width = '50px';
 		div_send.style.height = '50px';
 	    document.body.appendChild(div_send);
+		
+		ws.send('777');
+		
 	    div_send.onmousedown = function()
 		{
 		  ws.send(Math.random()*1000);
