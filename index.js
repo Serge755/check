@@ -12,17 +12,19 @@ server.listen(port)
 console.log("http server listening on %d", port)
 
 var wss = new WebSocketServer({server: server})
-console.log("websocket server created")
+console.log("websocket server created");
+
+var text = 'm ';
 
 wss.on("connection", function(ws) {
 	
-  var id = setInterval(function() {
-    //ws.send(JSON.stringify(new Date()), function() {  })
-	// node index.js
-	ws.send('Привет, Витя ' + ws.upgradeReq.connection.remoteAddress + '/' + ws._socket.remoteAddress, function() {  })
+  var id = setInterval(function() 
+  {
+	 //ws.send('Привет, Витя ' + ws.upgradeReq.connection.remoteAddress + '/' + ws._socket.remoteAddress, function() {  })
+	   ws.send(text);
   }, 1000)
   
-  
+
   console.log("websocket connection open")
 
   ws.on("close", function() {
@@ -30,3 +32,20 @@ wss.on("connection", function(ws) {
     clearInterval(id)
   })
 })
+
+
+wss.on("message", function(ws) {
+	text = ws.data + ' ';
+})
+
+
+/*
+//************************************************
+var fs = require("fs");
+fs.writeFile("graffiti.txt", "Здесь был Node ", function(err) {
+  if (err)
+    console.log("Ничего не вышло, и вот почему:", err);
+  else
+    console.log("Запись успешна. Все свободны.");
+});
+*/
