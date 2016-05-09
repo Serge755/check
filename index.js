@@ -38,7 +38,8 @@ wss.on("connection", function(ws)
   ws.on('message', function message(data) 
   {
     //console.log('Roundtrip time: ' + (Date.now() - parseInt(data)) + 'ms', flags);
-     ws.send(data);
+     //ws.send(data);
+	 text = data + ' ';
   })
   
  
