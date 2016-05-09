@@ -34,12 +34,14 @@ wss.on("connection", function(ws)
     clearInterval(id)
   })
   
-  ws.on('message', function incoming(message) 
-  {
-	text = message + ' ';
-    //console.log('received: %s', message);
-  });
   
+  ws.on('message', function message(data, flags) 
+  {
+    //console.log('Roundtrip time: ' + (Date.now() - parseInt(data)) + 'ms', flags);
+     ws.send(Date.now().toString() + data, {mask: true});
+  }
+  
+ 
 })
 
 
