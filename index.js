@@ -7,7 +7,7 @@ var port = process.env.PORT
 app.use(express.static(__dirname + "/"))
 
 var server = http.createServer(app)
-server.listen(port)
+server.listen(5000)
 
 console.log("http server listening on %d", port)
 
