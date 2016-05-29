@@ -35,7 +35,7 @@ wss.on("connection", function(ws)
   var id = setInterval(function() 
   {
 	  //ws.send('Привет, Витя ' + ws.upgradeReq.connection.remoteAddress + '/' + ws._socket.remoteAddress, function() {  })
-	  ws.send(text);
+	  //ws.send(text);
   }, 1000)
   
 
