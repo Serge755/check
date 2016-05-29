@@ -16,22 +16,33 @@ console.log("websocket server created");
 
 var text = 'm ';
 
+var fs = require("fs");
+
+
+server.on("connection", function()
+{
+	fs.readFile("message.txt", {encoding: 'utf-8'}, function(err, data)
+	{
+       text = data.toString();
+    });
+})
+
 
 wss.on("connection", function(ws) 
 {
-	console.log("connection")
+  console.log("websocket connection open")
+
   var id = setInterval(function() 
   {
-	 //ws.send('Привет, Витя ' + ws.upgradeReq.connection.remoteAddress + '/' + ws._socket.remoteAddress, function() {  })
-	   ws.send(text);
+	  //ws.send('Привет, Витя ' + ws.upgradeReq.connection.remoteAddress + '/' + ws._socket.remoteAddress, function() {  })
+	  ws.send(text);
   }, 1000)
   
 
-  console.log("websocket connection open")
-
   ws.on("close", function() {
-    console.log("websocket connection close")
-    clearInterval(id)
+     console.log("websocket connection close")
+     clearInterval(id)
+     //fs.writeFile("close.txt", ws, function(err) {  });
   })
   
   
@@ -40,28 +51,27 @@ wss.on("connection", function(ws)
      //console.log('Roundtrip time: ' + (Date.now() - parseInt(data)) + 'ms', flags);
 	 text += data + ' ';
 	 ws.send(text);
+	 
+	 append(data);
+  })
 
-	 var fs = require("fs");
-     fs.writeFile("send.txt", text, function(err) {
+})
+
+
+ function append(mes)
+ {
+	fs.appendFile('message.txt', mes + ' /', 'utf8', function(){}); 
+ }
+
+ 
+ function write(mes)
+ {
+     fs.writeFile("message.txt", mes, function(err) {
      if (err)
        console.log("Ничего не вышло, и вот почему:", err);
      else
        console.log("Запись успешна. Все свободны.");
      });
-  })
-  
+ }
  
-})
 
-
-
-/*
-//************************************************
-var fs = require("fs");
-fs.writeFile("graffiti.txt", "Здесь был Node ", function(err) {
-  if (err)
-    console.log("Ничего не вышло, и вот почему:", err);
-  else
-    console.log("Запись успешна. Все свободны.");
-});
-*/

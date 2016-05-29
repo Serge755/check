@@ -3,8 +3,6 @@
 
   </head>
   
-  
-
   <body>
   
     <script>
@@ -16,7 +14,7 @@
 	  connect = function()
 	  {
         host = 'ws://school5.herokuapp.com';
-		//host = 'ws://localhost:5000';
+	    host = 'ws://localhost:5000';
 		ws = new WebSocket(host);
 	    
         ws.onmessage = function (event)
@@ -29,7 +27,7 @@
 	  {	  
 	    div = document.createElement('div');
 	    div.style.background = '#555';
-		div.style.width = '500px';
+		div.style.width = '1250px';
 		div.style.height = '500px';
 		div.style.color = '#FFF';
 	    document.body.appendChild(div);
@@ -41,19 +39,26 @@
 		div_send.style.height = '50px';
 	    document.body.appendChild(div_send);
 		
-		//ws.send('777');
-		
 	    div_send.onmousedown = function()
 		{
-		  ws.send(Math.random()*1000);
-		}		
+		  //ws.send(Math.random()*1000);
+		  ws.send(inp.value);
+		}
+
+	    inp = document.createElement('input');
+	    inp.style.background = '#ccc';
+		inp.style.width = '175px';
+		inp.style.height = '25px';
+		inp.style.color = '#FF0';
+		inp.style.border = '1px solid #555';
+	    document.body.appendChild(inp);
+	    inp.onmousedown = function() {};
+		
 	  }
 	  
 
     </script>  
 
   </body>
-  
-  
   
 </html>
