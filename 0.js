@@ -23,7 +23,7 @@ server.on("connection", function()
 {
 	fs.readFile("message.txt", {encoding: 'utf-8'}, function(err, data)
 	{
-       text = data.toString();
+	   if (data) text = data.toString();
     });
 })
 
