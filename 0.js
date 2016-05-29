@@ -32,16 +32,17 @@ wss.on("connection", function(ws)
 {
   console.log("websocket connection open")
 
+  /*
   var id = setInterval(function() 
   {
 	  //ws.send('Привет, Витя ' + ws.upgradeReq.connection.remoteAddress + '/' + ws._socket.remoteAddress, function() {  })
 	  //ws.send(text);
   }, 1000)
-  
+  */
 
   ws.on("close", function() {
      console.log("websocket connection close")
-     clearInterval(id)
+     //clearInterval(id)
      //fs.writeFile("close.txt", ws, function(err) {  });
   })
   
