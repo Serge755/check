@@ -7,17 +7,19 @@
   
     <script>
 	
-      document.onselectstart=function(){return false} 
+      //document.onselectstart=function(){return false} 
       document.oncontextmenu=function(){return false;} 
-      document.onmousedown=function(){return false}
+      //document.onmousedown=function(){return false}
 
-	  var host;// = location.origin.replace(/^http/, 'ws');
+	  var host;
 	  var ws;
 	  var div;
 	  var canvas;
 	  var context;
 	  var mouse = {};
+	  var color =[];
 
+	  //************************************************
 	  connect = function()
 	  {
         host = 'ws://school5.herokuapp.com';
@@ -34,12 +36,10 @@
 	  
 	  document.body.onload = function()
 	  {	  		
-	  
-	  
 	    canvas = document.createElement('canvas');
         context = canvas.getContext('2d');
-        canvas.width = 2000;
-        canvas.height = 2000;
+        canvas.width = 1600;
+        canvas.height = 1000;
 		canvas.style.position = 'absolute';
 		canvas.style.left = 0;
 		canvas.style.top = 0;
@@ -48,9 +48,11 @@
 		document.body.appendChild(canvas);
 		
 		context.fillStyle = 'rgba(255, 175, 50, 0.5)';
+		context.fillStyle = 'rgba(255, 255, 255, 1)';
 	    context.fillRect(0, 0, canvas.width, canvas.height);
 		
 		context.strokeStyle = 'rgba(255, 175, 50, 0.5)';
+		context.fillStyle = 'rgba(175, 125, 35, 0.25)';
 		//context.lineWidth = 1;
 		context.beginPath();
 		for (var x = 0; x < canvas.width/20; x++)
@@ -64,6 +66,24 @@
 		  context.lineTo(canvas.width, y * 20);
 		}
 		context.stroke();
+		
+		for (var x = 0; x < 18; x++)
+		{
+		   var r = Math.round(Math.sin((x - 6) * 10 * Math.PI/180) * 255);  
+		   var g = Math.round(Math.sin((x - 0) * 10 * Math.PI/180) * 255);
+		   var b = Math.round(Math.sin((x + 6) * 10 * Math.PI/180) * 255);
+		   
+		   if (r < 0) r = 0; if (g < 0) g = 0; if (b < 0) b = 0;
+		   if (r > 255) r = 255; if (g > 255) g = 255; if (b > 255) b = 255;
+		   
+		   color[x] = 'rgba(' + r + ', ' + g + ', ' + b + ', 0.5)';
+		   context.fillStyle = color[x];
+	       context.fillRect(x * 20 + 1, 2, 18, 18); 
+		}
+		
+		   color[18] = 'rgba(125, 125, 125, 0.5)';
+		   context.fillStyle = color[18];
+	       context.fillRect(361, 2, 18, 18);		
 		
 		
 	    div = document.createElement('div');
@@ -80,7 +100,6 @@
 		div_send.style.width = '75px';
 		div_send.style.height = '50px';
 	    //document.body.appendChild(div_send);
-		
 
 	    inp = document.createElement('input');
 	    inp.style.background = '#ccc';
@@ -90,27 +109,7 @@
 		inp.style.border = '1px solid #555';
 	    //document.body.appendChild(inp);
 
-		/*
-        canvas.onmousemove = function(event)
-		{
-          if (document.attachEvent != null) {
-          mouse.x = window.event.clientX;
-          mouse.y = window.event.clientY;
-        } else if (!document.attachEvent && document.addEventListener)
-		{
-          mouse.x = event.clientX;
-          mouse.y = event.clientY;
-        }
-		  var x = Math.floor(mouse.x / 20) * 20;
-		  var y = Math.floor(mouse.y / 20) * 20;
-		  inp.value = x + '^' + y;
-        }
-		*/
-		
-        canvas.onmousedown = mousedown;
-		
-		
-		function mousedown(event)
+        canvas.onmousedown = function mousedown(event)
 		{
           if (document.attachEvent != null)
 		{
@@ -121,10 +120,11 @@
           mouse.x = event.clientX;
           mouse.y = event.clientY;
         }
-		  var x = Math.floor(mouse.x / 20) * 20;
-		  var y = Math.floor(mouse.y / 20) * 20;
+		  var x = Math.floor(mouse.x / 20);
+		  var y = Math.floor(mouse.y / 20);
 		  
-		  ws.send(x + '^' + y + '^' + event.which);
+		  if (y > 0) ws.send('p^' + x + '^' + y + '^' + event.which)
+		  else if (x <= 18) ws.send('c^' + color[x]) ;
         }
 
 	  }
@@ -136,27 +136,24 @@
 	    try
 		{
 	       var A = data.split("^");
-		
-		   var x = parseInt(A[0]);
-		   var y = parseInt(A[1]);
 		   
-			//context.shadowOffsetX = 1;
-            //context.shadowOffsetY = 1;
-            //context.shadowBlur = 4;  
-            //context.shadowColor = "rgba(0,0,0,0.35)";
-	    
-	       context.fillStyle = 'rgba(175, 125, 35, 0.25)';
-		   if (A[2] == 3)
+		   if (A[0] === 'p')
 		   {
-		     context.clearRect(x+1, y+1, 18, 18);
-		     context.fillStyle = 'rgba(255, 175, 50, 0.5)';
+		      var x = parseInt(A[1]);
+		      var y = parseInt(A[2]);
+
+		      if (A[3] === '3') context.clearRect(x * 20 + 1, y * 20 + 1, 18, 18);
+			  else context.fillRect(x * 20 + 1, y * 20 + 1, 18, 18);   		  
 		   }
 		   
-	       context.fillRect(x+1, y+1, 18, 18);
+		   if (A[0] === 'c')
+		   {
+		      context.fillStyle = A[1];
+		   }
+
 		}
 		catch(e){}
 	  }
-	  
 	  
 	  
 	  
