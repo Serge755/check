@@ -28,13 +28,17 @@ var text = '';
   }, 30000);
   
 
+  W = [];
+  
+  
 //***********************************************
 wss.on("connection", function(ws) 
 {
     ws.send(text);
 	
-    ws.on("close", function() {
+     ws.on("close", function() {
      //clearInterval(id)
+	 ws.enable = false; 
     })
   
   
@@ -42,9 +46,14 @@ wss.on("connection", function(ws)
     {
       //console.log('Roundtrip time: ' + (Date.now() - parseInt(data)) + 'ms', flags);
 	 text += data + '/';
-	 ws.send(data);
+	 
+	 for (var n = 0; n < W.length; n++) if (W[n].enable === true) W[n].send(data);
 	 //append(data);
     })
+	
+	ws.enable = true; 
+	
+	W[W.length] = ws;
 
 })
 
