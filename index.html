@@ -10,56 +10,138 @@
 	  var host;// = location.origin.replace(/^http/, 'ws');
 	  var ws;
 	  var div;
+	  var canvas;
+	  var context;
+	  var mouse = {};
 
 	  connect = function()
 	  {
         host = 'ws://school5.herokuapp.com';
-	    //host = 'ws://localhost:5000';
+	    host = 'ws://localhost:5000';
 		ws = new WebSocket(host);
 	    
         ws.onmessage = function (event)
 	    {
 		  div.innerHTML = event.data;
+		  var A = event.data.split("/");
+		  for (var n = 0; n < A.length; n++) hod(A[n]);
         };
 	  }
 	  
 	  document.body.onload = function()
-	  {	  
+	  {	  		
+	    canvas = document.createElement('canvas');
+        context = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+		canvas.style.position = 'absolute';
+		canvas.style.left = 0;
+		canvas.style.top = 0;
+		canvas.style.cursor = 'pointer';
+		
+		document.body.appendChild(canvas);
+		
+		context.fillStyle = 'rgba(255, 175, 50, 0.5)';
+	    context.fillRect(0, 0, canvas.width, canvas.height);
+		
+		context.strokeStyle = 'rgba(255, 175, 50, 0.5)';
+		//context.lineWidth = 1;
+		context.beginPath();
+		for (var x = 0; x < canvas.width/20; x++)
+		{
+		  context.moveTo(x * 20, 0);
+		  context.lineTo(x * 20, canvas.height);
+		}
+		for (var y = 0; y < canvas.height/20; y++)
+		{
+		  context.moveTo(0, y * 20);
+		  context.lineTo(canvas.width, y * 20);
+		}
+		context.stroke();
+		
+		
 	    div = document.createElement('div');
 	    div.style.background = '#555';
-		div.style.width = '1250px';
-		div.style.height = '500px';
+		div.style.width = '1350px';
+		div.style.height = '50px';
 		div.style.color = '#FFF';
 		div.style.overflowY = 'scroll';
-	    document.body.appendChild(div);
+	    //document.body.appendChild(div);
 		connect();
-	    //div.onmousedown = 
 		
 	    var div_send = document.createElement('div');
 	    div_send.style.background = '#fc7';
 		div_send.style.width = '75px';
 		div_send.style.height = '50px';
-	    document.body.appendChild(div_send);
+	    //document.body.appendChild(div_send);
 		
-	    div_send.onmousedown = function()
-		{
-		  //ws.send(Math.random()*1000);
-		  ws.send(inp.value);
-		}
 
 	    inp = document.createElement('input');
 	    inp.style.background = '#ccc';
 		inp.style.width = '1275px';
-		inp.style.height = '25px';
+		inp.style.height = '18px';
 		inp.style.color = '#000';
 		inp.style.border = '1px solid #555';
-	    document.body.appendChild(inp);
-	    inp.onmousedown = function() {};
+	    //document.body.appendChild(inp);
+
 		
+        canvas.onmousemove = function(event)
+		{
+          if (document.attachEvent != null) {
+          mouse.x = window.event.clientX;
+          mouse.y = window.event.clientY;
+        } else if (!document.attachEvent && document.addEventListener)
+		{
+          mouse.x = event.clientX;
+          mouse.y = event.clientY;
+        }
+		  var x = Math.floor(mouse.x / 20) * 20;
+		  var y = Math.floor(mouse.y / 20) * 20;
+		  inp.value = x + '^' + y;
+        }
+		
+        canvas.onmousedown = mousedown;
+		
+		
+		function mousedown(event)
+		{
+          if (document.attachEvent != null)
+		{
+          mouse.x = window.event.clientX;
+          mouse.y = window.event.clientY;
+        } else if (!document.attachEvent && document.addEventListener)
+		{
+          mouse.x = event.clientX;
+          mouse.y = event.clientY;
+        }
+		  var x = Math.floor(mouse.x / 20) * 20;
+		  var y = Math.floor(mouse.y / 20) * 20;
+		  ws.send(x + '^' + y);
+        }
+
 	  }
 	  
 	  
-	  
+	  //******************************************************
+	  function hod(data)
+	  {
+	    try
+		{
+	       var A = data.split("^");
+		
+		   var x = parseInt(A[0]);
+		   var y = parseInt(A[1]);
+		   
+			context.shadowOffsetX = 1;
+            context.shadowOffsetY = 1;
+            context.shadowBlur = 4;  
+            context.shadowColor = "rgba(0,0,0,0.35)";
+	    
+	       context.fillStyle = 'rgba(175, 125, 35, 0.25)';
+	       context.fillRect(x, y, 18, 18);
+		}
+		catch(e){}
+	  }
 	  
 
     </script>  

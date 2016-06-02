@@ -21,48 +21,35 @@ var text = '';
 	   if (data) text = data.toString();
     });
 
-
-
-wss.on("connection", function(ws) 
-{
-  console.log("websocket connection open")
-
-  
-  ws.send(text);
-  
   var id = setInterval(function() 
   {
 	  //ws.send('Привет, Витя ' + ws.upgradeReq.connection.remoteAddress + '/' + ws._socket.remoteAddress, function() {  })
-	  //ws.send(text);
-  }, 1000)
+	  write(text);
+  }, 30000);
   
-  /**/
 
-  ws.on("close", function() {
-     console.log("websocket connection close")
+//***********************************************
+wss.on("connection", function(ws) 
+{
+    ws.send(text);
+	
+    ws.on("close", function() {
      //clearInterval(id)
-     //fs.writeFile("close.txt", ws, function(err) {  });
-  })
+    })
   
   
-  ws.on('message', function message(data) 
-  {
-     //console.log('Roundtrip time: ' + (Date.now() - parseInt(data)) + 'ms', flags);
+    ws.on('message', function message(data) 
+    {
+      //console.log('Roundtrip time: ' + (Date.now() - parseInt(data)) + 'ms', flags);
 	 text += data + '/';
-	 ws.send(text);
-	 
-	 append(data);
-  })
+	 ws.send(data);
+	 //append(data);
+    })
 
 })
 
 
- function append(mes)
- {
-	fs.appendFile('data.txt', mes + '/', 'utf8', function(){}); 
- }
-
- 
+//***********************************************
  function write(mes)
  {
      fs.writeFile("data.txt", mes, function(err) {
@@ -72,5 +59,14 @@ wss.on("connection", function(ws)
        //console.log("Запись успешна. Все свободны.");
      });
  }
+ 
+ //***********************************************
+ function append(mes)
+ {
+	fs.appendFile('data.txt', mes + '/', 'utf8', function(){}); 
+ }
+
+ 
+
  
 
