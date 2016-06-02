@@ -14,7 +14,7 @@
 	  connect = function()
 	  {
         host = 'ws://school5.herokuapp.com';
-	    //host = 'ws://localhost:5000';
+	    host = 'ws://localhost:5000';
 		ws = new WebSocket(host);
 	    
         ws.onmessage = function (event)
@@ -32,7 +32,8 @@
 		div.style.color = '#FFF';
 		div.style.overflowY = 'scroll';
 	    document.body.appendChild(div);
-	    div.onmousedown = connect;
+		connect();
+	    //div.onmousedown = 
 		
 	    var div_send = document.createElement('div');
 	    div_send.style.background = '#fc7';
@@ -48,14 +49,17 @@
 
 	    inp = document.createElement('input');
 	    inp.style.background = '#ccc';
-		inp.style.width = '175px';
+		inp.style.width = '1275px';
 		inp.style.height = '25px';
-		inp.style.color = '#FF0';
+		inp.style.color = '#000';
 		inp.style.border = '1px solid #555';
 	    document.body.appendChild(inp);
 	    inp.onmousedown = function() {};
 		
 	  }
+	  
+	  
+	  
 	  
 
     </script>  
