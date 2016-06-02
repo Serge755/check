@@ -34,8 +34,8 @@
 	  
 	    canvas = document.createElement('canvas');
         context = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.width = 2000;
+        canvas.height = 2000;
 		canvas.style.position = 'absolute';
 		canvas.style.left = 0;
 		canvas.style.top = 0;
@@ -86,7 +86,7 @@
 		inp.style.border = '1px solid #555';
 	    //document.body.appendChild(inp);
 
-		
+		/*
         canvas.onmousemove = function(event)
 		{
           if (document.attachEvent != null) {
@@ -101,6 +101,7 @@
 		  var y = Math.floor(mouse.y / 20) * 20;
 		  inp.value = x + '^' + y;
         }
+		*/
 		
         canvas.onmousedown = mousedown;
 		
@@ -118,7 +119,8 @@
         }
 		  var x = Math.floor(mouse.x / 20) * 20;
 		  var y = Math.floor(mouse.y / 20) * 20;
-		  ws.send(x + '^' + y);
+		  
+		  ws.send(x + '^' + y + '^' + event.which);
         }
 
 	  }
@@ -140,10 +142,13 @@
             context.shadowColor = "rgba(0,0,0,0.35)";
 	    
 	       context.fillStyle = 'rgba(175, 125, 35, 0.25)';
+		   if (A[2] === 2) context.fillStyle = 'rgba(255, 175, 50, 1)';
 	       context.fillRect(x, y, 18, 18);
 		}
 		catch(e){}
 	  }
+	  
+	  
 	  
 	  
 //***************************************************
