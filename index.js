@@ -25,7 +25,7 @@ var text = '';
   {
 	  //ws.send('Привет, Витя ' + ws.upgradeReq.connection.remoteAddress + '/' + ws._socket.remoteAddress, function() {  })
 	  write(text);
-  }, 30000);
+  }, 3000);
   
 
   W = [];
@@ -46,7 +46,7 @@ wss.on("connection", function(ws)
     {
       //console.log('Roundtrip time: ' + (Date.now() - parseInt(data)) + 'ms', flags);
 	 text += data + '/';
-	    write(text);
+	    //write(text);
 	 for (var n = 0; n < W.length; n++) if (W[n].enable === true) W[n].send(data);
 	 //append(data);
     })
