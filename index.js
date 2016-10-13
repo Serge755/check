@@ -46,7 +46,7 @@ wss.on("connection", function(ws)
     {
       //console.log('Roundtrip time: ' + (Date.now() - parseInt(data)) + 'ms', flags);
 	 text += data + '/';
-	 
+	    write(text);
 	 for (var n = 0; n < W.length; n++) if (W[n].enable === true) W[n].send(data);
 	 //append(data);
     })
