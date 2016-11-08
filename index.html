@@ -55,15 +55,15 @@
 		context.fillStyle = 'rgba(175, 125, 35, 0.25)';
 		//context.lineWidth = 1;
 		context.beginPath();
-		for (var x = 0; x < canvas.width/20; x++)
+		for (var x = 0; x < canvas.width/10; x++)
 		{
-		  context.moveTo(x * 20, 0);
-		  context.lineTo(x * 20, canvas.height);
+		  context.moveTo(x * 10, 0);
+		  context.lineTo(x * 10, canvas.height);
 		}
-		for (var y = 0; y < canvas.height/20; y++)
+		for (var y = 0; y < canvas.height/10; y++)
 		{
-		  context.moveTo(0, y * 20);
-		  context.lineTo(canvas.width, y * 20);
+		  context.moveTo(0, y * 10);
+		  context.lineTo(canvas.width, y * 10);
 		}
 		context.stroke();
 		
@@ -78,7 +78,7 @@
 		   
 		   color[x] = 'rgba(' + r + ', ' + g + ', ' + b + ', 0.5)';
 		   context.fillStyle = color[x];
-	       context.fillRect(x * 20 + 1, 2, 18, 18); 
+	       context.fillRect(x * 10 + 1, 2, 18, 18); 
 		}
 		
 		   color[18] = 'rgba(125, 125, 125, 0.5)';
@@ -120,8 +120,8 @@
           mouse.x = event.clientX;
           mouse.y = event.clientY;
         }
-		  var x = Math.floor(mouse.x / 20);
-		  var y = Math.floor(mouse.y / 20);
+		  var x = Math.floor(mouse.x / 10);
+		  var y = Math.floor(mouse.y / 10);
 		  
 		  if (y > 0) ws.send('p^' + x + '^' + y + '^' + event.which)
 		  else if (x <= 18) ws.send('c^' + color[x]) ;
@@ -142,8 +142,8 @@
 		      var x = parseInt(A[1]);
 		      var y = parseInt(A[2]);
 
-		      if (A[3] === '3') context.clearRect(x * 20 + 1, y * 20 + 1, 18, 18);
-			  else context.fillRect(x * 20 + 1, y * 20 + 1, 18, 18);   		  
+		      if (A[3] === '3') context.clearRect(x * 10 + 1, y * 10 + 1, 8, 8);
+			  else context.fillRect(x * 10 + 1, y * 10 + 1, 8, 8);   		  
 		   }
 		   
 		   if (A[0] === 'c')
