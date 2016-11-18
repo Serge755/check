@@ -14,6 +14,7 @@ console.log("http server listening on %d", port)
 var wss = new WebSocketServer({server: server})
 console.log("websocket server created");
 
+
 var fs = require("fs");
 var text = '';
 	fs.readFile("data.txt", {encoding: 'utf-8'}, function(err, data)
