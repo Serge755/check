@@ -2,7 +2,8 @@ var WebSocketServer = require("ws").Server
 var http = require("http")
 var express = require("express")
 var app = express()
-var port = process.env.PORT || 5000
+var port = process.env.PORT || 5000;
+port = 3000;
 
 app.use(express.static(__dirname + "/"))
 
@@ -25,8 +26,9 @@ var text = '';
   var id = setInterval(function() 
   {
 	  //ws.send('Привет, Витя ' + ws.upgradeReq.connection.remoteAddress + '/' + ws._socket.remoteAddress, function() {  })
-	  write(text);
-  }, 3000);
+	  //write(text);
+	 // post();
+  }, 30000);
   
 
   W = [];
